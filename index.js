@@ -29,8 +29,11 @@ async function run() {
         const toysCollection = client.db("MiniMotorMania").collection("toys")
 
         app.get('/toys', async (req, res) => {
-            const cursor = toysCollection.find()
-            const result = await cursor.toArray()
+            let query = {}
+            if (req.query?.email) {
+                query = { seller_email: req.query.email }
+            }
+            const result = await toysCollection.find(query).toArray()
             res.send(result)
         })
 
@@ -40,6 +43,16 @@ async function run() {
             const result = await toysCollection.findOne(query)
             res.send(result)
         })
+
+        // app.get('/toys', async (req, res) => {
+        //     console.log(req.query)
+        //     let query = {}
+        //     if(req.query?.email){
+        //         query = {email: req.query.email}
+        //     }
+        //     const result = await toysCollection.find(query).toArray()
+        //     res.send(result)
+        // })
 
         // post data 
         app.post('/toys', async (req, res) => {
