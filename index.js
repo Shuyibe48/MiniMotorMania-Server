@@ -38,7 +38,6 @@ async function run() {
             if (req.query?.email) {
                 query = { seller_email: req.query.email }
             }
-            console.log(req.query.ascending);
             if (req.query?.ascending === 'true') {
                 sort = { price: 1 }
             }
