@@ -29,11 +29,15 @@ async function run() {
         const toysCollection = client.db("MiniMotorMania").collection("toys")
 
         app.get('/toys', async (req, res) => {
+            const page = parseInt(req.query.page) || 0
+            const limit = parseInt(req.query.limit) || 20
+            const skip = page * limit
+
             let query = {}
             if (req.query?.email) {
                 query = { seller_email: req.query.email }
             }
-            const result = await toysCollection.find(query).toArray()
+            const result = await toysCollection.find(query).skip(skip).limit(limit).toArray()
             res.send(result)
         })
 
@@ -66,6 +70,12 @@ async function run() {
             }
             const result = await toysCollection.updateOne(filter, toy, options)
             res.send(result)
+        })
+
+        // total toy
+        app.get('/totalToys', async (req, res) => {
+            const result = await toysCollection.estimatedDocumentCount()
+            res.send({totalToys: result})
         })
 
         // delete data 
