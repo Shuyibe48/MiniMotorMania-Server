@@ -44,20 +44,18 @@ async function run() {
             res.send(result)
         })
 
-        // app.get('/toys', async (req, res) => {
-        //     console.log(req.query)
-        //     let query = {}
-        //     if(req.query?.email){
-        //         query = {email: req.query.email}
-        //     }
-        //     const result = await toysCollection.find(query).toArray()
-        //     res.send(result)
-        // })
-
         // post data 
         app.post('/toys', async (req, res) => {
             const toy = req.body
             const result = await toysCollection.insertOne(toy)
+            res.send(result)
+        })
+
+        // delete data 
+        app.delete('/toys/:id', async (req, res) => {
+            const id = req.params.id
+            const query = { _id: new ObjectId(id) }
+            const result = await toysCollection.deleteOne(query)
             res.send(result)
         })
 
